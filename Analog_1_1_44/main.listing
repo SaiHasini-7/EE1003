@@ -1,0 +1,12 @@
+
+plt.text(0.63, 1.0, r'$t_0=0.5\,$s', fontsize=9)
+plt.xlabel(r'$t$ (s)');
+plt.ylabel('Amplitude')
+plt.title(r'Distortion-Free Output: $K=0.6$, $t_0=0.5\,$s')
+
+plt.legend();
+plt.grid(True, linestyle='--', alpha=0.5)
+plt.tight_layout();
+
+plt.savefig('plot1.png', dpi=150)
+

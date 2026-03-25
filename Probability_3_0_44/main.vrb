@@ -1,0 +1,19 @@
+\frametitle{Python Code for Plot}
+
+\begin{mycode}
+# Shade P(Y >= 2)
+x_fill_Y = np.linspace(2, 10, 500)
+plt.fill_between(x_fill_Y,
+               norm.pdf(x_fill_Y, mu_Y, sigma_Y),
+               alpha=0.3, label=r'$P(Y \geq 2)$')
+
+# Labels and formatting
+plt.title(r'$P(X \leq -1)$ and $P(Y \geq 2)$', fontsize=12)
+plt.xlabel('x'); plt.ylabel('Probability Density')
+plt.legend(fontsize=10)
+plt.grid(True, linestyle='--', alpha=0.5)
+plt.tight_layout()
+plt.savefig('plot4.png', dpi=150)
+
+\end{mycode}
+

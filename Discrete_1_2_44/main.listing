@@ -1,0 +1,11 @@
+
+# Mark boundary condition
+plt.scatter([x_bc], [y_bc])
+plt.text(x_bc, y_bc, " (1,1)")
+
+plt.title("Solution with Boundary Condition")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.grid()
+plt.legend()
+plt.show()
