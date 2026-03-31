@@ -160,20 +160,18 @@ x\frac{dy}{dx} + y
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Define x range (avoid x = 0)
-x = np.linspace(0.1, 2, 1000)
+def f(x, y):
+    return x**3 - y/x
 
-# Solution of the differential equation
-y = (x**4)/5 + 4/(5*x)
-
-# Boundary condition
-x_bc = 1
-y_bc = 1
-
-# Plot the solution
-plt.figure()
-plt.plot(x, y, label="y = x^4/5 + 4/(5x)")
-
+def rk4(f, x0, y0, xf, h):
+    xs, ys = [x0], [y0]
+    x, y = x0, y0
+    while x < xf - 1e-10:
+        k1 = f(x, y)
+        k2 = f(x + h/2, y + h/2 * k1)
+        k3 = f(x + h/2, y + h/2 * k2)
+        k4 = f(x + h, y + h * k3)
+       
 \end{mycode}
 
 \end{frame}
@@ -183,16 +181,39 @@ plt.plot(x, y, label="y = x^4/5 + 4/(5x)")
 
 \begin{mycode}
 
-# Mark boundary condition
-plt.scatter([x_bc], [y_bc])
-plt.text(x_bc, y_bc, " (1,1)")
+ y = y + h/6*(k1 + 2*k2 + 2*k3 + k4)
+        x = x + h
+        xs.append(x); ys.append(y)
+    return np.array(xs), np.array(ys)
+    
+x0, y0, xf, h = 1.0, 1.0, 2.0, 0.25
+xs, ys_rk4 = rk4(f, x0, y0, xf, h)
 
-plt.title("Solution with Boundary Condition")
-plt.xlabel("x")
+x = np.linspace(0.1, 2, 1000)
+y = (x**4)/5 + 4/(5*x)
+
+plt.figure()
+plt.plot(x, y, label="Exact: y = x^4/5 + 4/(5x)")
+plt.plot(xs, ys_rk4, 'o--', label="RK4 (h=0.25)")
+
+\end{mycode}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Python Code for Plot}
+
+\begin{mycode}
+plt.scatter([1], [1], color='red', zorder=5)
+plt.text(1, 1, " (1,1)")
+plt.title("Exact Solution vs RK4")
+plt.xlabel("x"); 
 plt.ylabel("y")
-plt.grid()
-plt.legend()
+
+plt.legend();
+plt.grid();
 plt.show()
+
 \end{mycode}
 
 \end{frame}
@@ -203,10 +224,60 @@ plt.show()
 \end{center}
 
 \begin{itemize}
-\item Curve represents the solution
+\item Exact solution curve and RK4 points on same plot
 \item Point (1,1) satisfies boundary condition
-\item Confirms correctness of solution
+\item RK4 closely follows exact curve — confirms correctness
 \end{itemize}
 \end{frame}
+
+%--- RK4 Method ---
+
+\begin{frame}{RK4 Method: Overview}
+Rewrite the ODE as:
+\[
+\frac{dy}{dx} = x^3 - \frac{y}{x} = f(x, y)
+\]
+
+The \textbf{Runge-Kutta 4th order} update rule:
+\[
+k_1 = h\,f(x_n,\, y_n)
+\]
+\[
+k_2 = h\,f\!\left(x_n + \tfrac{h}{2},\; y_n + \tfrac{k_1}{2}\right)
+\]
+\[
+k_3 = h\,f\!\left(x_n + \tfrac{h}{2},\; y_n + \tfrac{k_2}{2}\right)
+\]
+\[
+k_4 = h\,f\!\left(x_n + h,\; y_n + k_3\right)
+\]
+\[
+y_{n+1} = y_n + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)
+\]
+with step size $h = 0.25$, starting from $x_0 = 1,\; y_0 = 1$.
+\end{frame}
+
+\begin{frame}{RK4 Numerical Results}
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+$x$ & RK4 & Exact & Error \\
+\hline
+1.0000 & 1.000000 & 1.000000 & 0.00e+00 \\
+1.2500 & 1.128288 & 1.128281 & 6.51e-06 \\
+1.5000 & 1.545844 & 1.545833 & 1.09e-05 \\
+1.7500 & 2.332938 & 2.332924 & 1.40e-05 \\
+2.0000 & 3.600016 & 3.600000 & 1.63e-05 \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+\begin{block}{Observation}
+RK4 matches the exact solution with very small error ($\sim 10^{-5}$), confirming the correctness of the analytical solution.
+\end{block}
+\end{frame}
+
+
 
 \end{document}

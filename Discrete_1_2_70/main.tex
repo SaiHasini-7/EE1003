@@ -1,0 +1,281 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\tcbuselibrary{listings, skins}
+
+\newtcblisting{mycode}{
+  arc=0mm,
+  boxrule=0.5pt,
+  colback=white,
+  colframe=black,
+  listing only,
+  listing options={
+    language=Python,
+    basicstyle=\small\ttfamily,
+    keywordstyle=\color{blue},
+    commentstyle=\color{blue},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    breaklines=true
+  },
+  sharp corners,
+  enhanced,
+}
+\usepackage{graphicx}
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\bfseries,
+    showstringspaces=false,
+    breaklines=true
+}
+
+\title{Discrete-1.2.70}
+\author{SAI HASINI PAPPULA-EE25BTECH11044}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%--- Problem Statement ---
+\begin{frame}{Problem}
+\textbf{Solve the differential equation:}
+\[
+\frac{dy}{dx} = x^2 + 2y
+\]
+with initial condition $y = 1$ at $x = 0$.
+
+\vspace{1em}
+\textbf{Options:}
+\begin{enumerate}[(a)]
+    \item $y = \dfrac{2}{3}x^2 + 4x$
+    \item $y = \sqrt{\dfrac{2}{3}x^3 + 4x + k}$
+    \item $y = \dfrac{2}{3}x^3 - 4x + k$
+    \item $y = \dfrac{2}{3}x^3 + 4x + k$
+\end{enumerate}
+\end{frame}
+
+%--- Step 1 ---
+\begin{frame}{Step 1: Rewrite in Standard Form}
+Rearrange:
+\[
+\frac{dy}{dx} - 2y = x^2
+\]
+
+This is a \textbf{first-order linear ODE} of the form:
+\[
+\frac{dy}{dx} + P(x)\,y = Q(x)
+\]
+where
+\[
+P(x) = -2, \qquad Q(x) = x^2
+\]
+\end{frame}
+
+%--- Step 2 ---
+\begin{frame}{Step 2: Integrating Factor}
+The integrating factor is:
+\[
+\mu(x) = e^{\int P(x)\,dx} = e^{\int -2\,dx} = e^{-2x}
+\]
+
+Multiply both sides by $\mu(x) = e^{-2x}$:
+\[
+e^{-2x}\frac{dy}{dx} - 2e^{-2x}y = x^2 e^{-2x}
+\]
+
+The left-hand side becomes a perfect derivative:
+\[
+\frac{d}{dx}\!\left(y\,e^{-2x}\right) = x^2 e^{-2x}
+\]
+\end{frame}
+
+%--- Step 3 ---
+\begin{frame}{Step 3: Integrate Both Sides}
+\[
+\int d\!\left(y\,e^{-2x}\right) = \int x^2\,e^{-2x}\,dx
+\]
+
+Using integration by parts twice on the right:
+\[
+\int x^2 e^{-2x}\,dx = -\frac{x^2}{2}e^{-2x} - \frac{x}{2}e^{-2x} - \frac{1}{4}e^{-2x} + C
+\]
+
+Therefore:
+\[
+y\,e^{-2x} = -\frac{x^2}{2}e^{-2x} - \frac{x}{2}e^{-2x} - \frac{1}{4}e^{-2x} + C
+\]
+
+Dividing by $e^{-2x}$:
+\[
+y = Ce^{2x} - \frac{x^2}{2} - \frac{x}{2} - \frac{1}{4}
+\]
+\end{frame}
+
+%--- Step 4 ---
+\begin{frame}{Step 4: Apply Initial Condition}
+Apply $y = 1$ at $x = 0$:
+\[
+1 = C\,e^{0} - 0 - 0 - \frac{1}{4}
+\]
+\[
+1 = C - \frac{1}{4} \implies C = \frac{5}{4}
+\]
+
+\vspace{0.5em}
+\begin{block}{Final Solution}
+\[
+y = \frac{5}{4}e^{2x} - \frac{x^2}{2} - \frac{x}{2} - \frac{1}{4}
+\]
+\end{block}
+\end{frame}
+
+%--- Verification ---
+\begin{frame}{Verification}
+\textbf{Check ODE:} $\quad y = \dfrac{5}{4}e^{2x} - \dfrac{x^2}{2} - \dfrac{x}{2} - \dfrac{1}{4}$
+
+\[
+\frac{dy}{dx} = \frac{5}{2}e^{2x} - x - \frac{1}{2}
+\]
+
+\[
+x^2 + 2y = x^2 + \frac{5}{2}e^{2x} - x^2 - x - \frac{1}{2} = \frac{5}{2}e^{2x} - x - \frac{1}{2} \checkmark
+\]
+
+\vspace{0.4em}
+\textbf{Check IC:} $\quad y(0) = \dfrac{5}{4} - 0 - 0 - \dfrac{1}{4} = 1$ \checkmark
+
+\vspace{0.5em}
+\begin{block}{Conclusion}
+\[
+y = \frac{5}{4}e^{2x} - \frac{x^2}{2} - \frac{x}{2} - \frac{1}{4}
+\]
+\end{block}
+\end{frame}
+
+%--- RK4 Overview ---
+\begin{frame}{RK4 Method: Overview}
+The ODE is $f(x,y) = x^2 + 2y$.
+
+\vspace{0.3em}
+The \textbf{Runge-Kutta 4th order} update rule:
+\[
+k_1 = h\,f(x_n,\, y_n)
+\]
+\[
+k_2 = h\,f\!\left(x_n + \tfrac{h}{2},\; y_n + \tfrac{k_1}{2}\right)
+\]
+\[
+k_3 = h\,f\!\left(x_n + \tfrac{h}{2},\; y_n + \tfrac{k_2}{2}\right)
+\]
+\[
+k_4 = h\,f\!\left(x_n + h,\; y_n + k_3\right)
+\]
+\[
+y_{n+1} = y_n + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)
+\]
+Starting from $x_0 = 0,\; y_0 = 1$, step size $h = 0.25$.
+\end{frame}
+
+%--- RK4 Table ---
+\begin{frame}{RK4 Numerical Results}
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+$x$ & RK4 & Exact & Error \\
+\hline
+0.0000 & 1.000000  & 1.000000  & 0.00e+00 \\
+0.2500 & 1.654378  & 1.654652  & 2.73e-04 \\
+0.5000 & 2.771898  & 2.772852  & 9.54e-04 \\
+0.7500 & 4.693406  & 4.695861  & 2.46e-03 \\
+1.0000 & 7.980764  & 7.986320  & 5.56e-03 \\
+1.2500 & 13.560169 & 13.571867 & 1.17e-02 \\
+1.5000 & 22.958397 & 22.981921 & 2.35e-02 \\
+1.7500 & 38.692244 & 38.738065 & 4.58e-02 \\
+2.0000 & 64.910489 & 64.997688 & 8.72e-02 \\
+\hline
+\end{tabular}
+\end{center}
+\begin{block}{Observation}
+Error grows with $x$ due to the exponential nature of the solution, but remains small relative to the solution magnitude.
+\end{block}
+\end{frame}
+
+%--- Python Code Part 1 ---
+\begin{frame}[fragile]
+\frametitle{Python Code}
+\begin{mycode}
+import numpy as np
+import matplotlib.pyplot as plt
+
+def f(x, y):
+    return x**2 + 2*y
+
+def rk4(f, x0, y0, xf, h):
+    xs, ys = [x0], [y0]
+    x, y = x0, y0
+    while x < xf - 1e-10:
+        k1 = f(x, y)
+        k2 = f(x + h/2, y + h/2 * k1)
+        k3 = f(x + h/2, y + h/2 * k2)
+        k4 = f(x + h, y + h * k3)
+       
+\end{mycode}
+\end{frame}
+
+%--- Python Code Part 2 ---
+\begin{frame}[fragile]
+\frametitle{Python Code}
+\begin{mycode}
+ y = y + h/6*(k1 + 2*k2 + 2*k3 + k4)
+        x = x + h
+        xs.append(x); ys.append(y)
+    return np.array(xs), np.array(ys)
+x0, y0, xf, h = 0.0, 1.0, 2.0, 0.25
+xs, ys_rk4 = rk4(f, x0, y0, xf, h)
+
+x_plot = np.linspace(0, 2, 500)
+C = 5/4
+y_plot = C*np.exp(2*x_plot) - x_plot**2/2 - x_plot/2 - 1/4
+
+plt.figure()
+plt.plot(x_plot, y_plot,
+    label=r'Exact: $y=\frac{5}{4}e^{2x}-\frac{x^2}{2}-\frac{x}{2}-\frac{1}{4}$')
+
+\end{mycode}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Python Code}
+\begin{mycode}
+
+plt.plot(xs, ys_rk4, 'o--', label='RK4 (h=0.25)')
+plt.scatter([0], [1], color='red', zorder=5)
+plt.text(0.05, 1, ' (0,1)')
+plt.title('Exact Solution vs RK4')
+plt.xlabel('x'); plt.ylabel('y')
+plt.legend(); plt.grid()
+plt.savefig('plot2.png', dpi=150)
+
+\end{mycode}
+\end{frame}
+
+%--- Graph ---
+\begin{frame}{Graph of the Solution}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{plot2.png}
+\end{center}
+\begin{itemize}
+\item Exact solution curve and RK4 points on same plot
+\item Point (0,1) satisfies the initial condition
+\item RK4 closely follows exact curve --- confirms correctness
+\end{itemize}
+\end{frame}
+
+\end{document}

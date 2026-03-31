@@ -1,0 +1,12 @@
+\frametitle{Python Code}
+\begin{mycode}
+
+plt.plot(xs, ys_rk4, 'o--', label='RK4 (h=0.25)')
+plt.scatter([0], [1], color='red', zorder=5)
+plt.text(0.05, 1, ' (0,1)')
+plt.title('Exact Solution vs RK4')
+plt.xlabel('x'); plt.ylabel('y')
+plt.legend(); plt.grid()
+plt.savefig('plot2.png', dpi=150)
+
+\end{mycode}

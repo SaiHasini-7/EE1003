@@ -89,6 +89,32 @@ Taking the Fourier transform of $y(t) = K\,x(t-t_0)$:
 \]
 \end{frame}
 
+% ─── Fourier Transform Solution ──────────────────────────────────────────────
+\begin{frame}{Fourier Transform Approach}
+\textbf{Step 1:} Express the input as a sum of sinusoids (Fourier series/transform):
+\[
+  x(t) = \sum_{n} A_n \cos(\omega_n t + \phi_n)
+\]
+
+\textbf{Step 2:} Each component passes through $G(j\omega)$:
+\[
+  |G(j\omega_n)| = K, \qquad \angle G(j\omega_n) = -\omega_n t_0
+\]
+
+\textbf{Step 3:} Output of each component:
+\[
+  y_n(t) = K \cdot A_n \cos\!\left(\omega_n t + \phi_n - \omega_n t_0\right)
+         = K \cdot A_n \cos\!\left(\omega_n(t - t_0) + \phi_n\right)
+\]
+
+\textbf{Step 4:} Superposition gives:
+\[
+  y(t) = \sum_n y_n(t) = K\,x(t - t_0) \checkmark
+\]
+
+Every component is delayed by the \emph{same} $t_0$ — shape preserved.
+\end{frame}
+
 % ─── Required Conditions ─────────────────────────────────────────────────────
 \begin{frame}{Required Conditions on $G(j\omega)$}
 From $G(j\omega) = K\,e^{-j\omega t_0}$, two conditions follow:
@@ -112,6 +138,89 @@ The group delay must be constant:
   \tau_g(\omega) = -\frac{d}{d\omega}\angle G(j\omega) = t_0 = \text{const}
 \]
 Constant group delay $\Leftrightarrow$ linear phase $\Leftrightarrow$ no phase distortion.
+\end{block}
+\end{frame}
+
+% ─── Example 1 ───────────────────────────────────────────────────────────────
+\begin{frame}{Example 1: Two-Component Signal}
+Let $x(t) = \cos(2\pi t) + \cos(6\pi t)$, with $K = 1$, $t_0 = 0.5\,$s.
+
+\vspace{0.5em}
+\textbf{Fourier analysis:} Two components at $\omega_1 = 2\pi$ and $\omega_2 = 6\pi$.
+
+\vspace{0.3em}
+\textbf{Phase applied by $G(j\omega) = e^{-j\omega t_0}$:}
+\[
+  \angle G(j\omega_1) = -2\pi \times 0.5 = -\pi \;\text{ rad}
+\]
+\[
+  \angle G(j\omega_2) = -6\pi \times 0.5 = -3\pi \;\text{ rad}
+\]
+
+\textbf{Output:}
+\[
+  y(t) = \cos(2\pi(t-0.5)) + \cos(6\pi(t-0.5))
+       = \cos(2\pi t - \pi) + \cos(6\pi t - 3\pi)
+\]
+\[
+  = x(t - 0.5) \checkmark
+\]
+\begin{block}{Observation}
+Both components delayed by the same $t_0 = 0.5\,$s. Output shape = input shape.
+\end{block}
+\end{frame}
+
+% ─── Example 2 ───────────────────────────────────────────────────────────────
+\begin{frame}{Example 2: Constant Phase (Non-Distortion-Free)}
+Let $x(t) = \cos(2\pi t) + \cos(6\pi t)$, but now $\angle G(j\omega) = -\dfrac{\pi}{2}$ (constant).
+
+\vspace{0.5em}
+\textbf{Time delay per component:}
+\[
+  t_{\text{delay}}(\omega_1) = \frac{\pi/2}{2\pi} = 0.25\;\text{s}
+\]
+\[
+  t_{\text{delay}}(\omega_2) = \frac{\pi/2}{6\pi} = 0.083\;\text{s}
+\]
+
+\textbf{Output:}
+\[
+  y(t) = \cos(2\pi t - \tfrac{\pi}{2}) + \cos(6\pi t - \tfrac{\pi}{2})
+\]
+\[
+  = \cos\!\bigl(2\pi(t-0.25)\bigr) + \cos\!\bigl(6\pi(t-0.083)\bigr)
+\]
+
+\begin{block}{Observation}
+Different delays for different frequencies $\Rightarrow$ shape changes $\Rightarrow$ \textbf{distortion}.
+\end{block}
+\end{frame}
+
+% ─── Example 3 ───────────────────────────────────────────────────────────────
+\begin{frame}{Example 3: Linear Phase Verified Numerically}
+$x(t) = \cos(2\pi t) + 0.4\cos(6\pi t) + 0.2\cos(10\pi t)$, $K=0.6$, $t_0=0.3\,$s.
+
+\vspace{0.3em}
+\textbf{Phase at each frequency:}
+
+\vspace{0.2em}
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|c|c|c|c|}
+\hline
+$\omega$ (rad/s) & $\angle G = -\omega t_0$ & $t_{\text{delay}}$ & Distortion? \\
+\hline
+$2\pi \approx 6.28$ & $-1.885$ rad & $0.3\,$s & No \\
+$6\pi \approx 18.85$ & $-5.655$ rad & $0.3\,$s & No \\
+$10\pi \approx 31.42$ & $-9.425$ rad & $0.3\,$s & No \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{0.4em}
+\begin{block}{Observation}
+All three components have identical delay $t_0 = 0.3\,$s. \\
+$y(t) = 0.6\,x(t - 0.3)$ — distortion-free. $\checkmark$
 \end{block}
 \end{frame}
 
